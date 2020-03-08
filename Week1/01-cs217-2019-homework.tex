@@ -1,11 +1,11 @@
 
 \documentclass[12pt,a4]{article}
-
+\author{Yujie Lu \quad Jiabao Ji \quad Tong Chen}
 
 \newcommand{\handoutdate}{2020-03-05}
 \newcommand{\firstduedate}{2020-03-10}
 \newcommand{\finalduedate}{2020-03-17 before class}
-
+\usepackage{pythonhighlight}
 \input{preamble}
 
 \section{Bit Complexity, Recursion, and Dynamic Programming}
@@ -26,7 +26,14 @@ has complexity $O(n^2)$.
   to run in $O( k(n-k))$ operations.
 \end{exercise}
 \begin{proof}
-		
+First, we know $n > k$ since $a > b$. To get r, $r = a \% b, (0 \leq r < b)$,
+so the bits of $r$, we write it as $b_r$. $b_r < k$.
+
+Remind the procedure of brute-force algorithm of $a \% b$, in each iteration,
+$n$ decreases(since we can drop the higher bits). In the final iteration, $n < k$,
+also this $n$ is exactly $b_r$, so we don't need to do the iteration $n$ times,
+but only $n - k$ times. And each iteration costs $n$ subtraction operation, which is an integer operation,
+in all we do no more than $n(n - k)$ times of basic operations.
 \end{proof}
 \begin{exercise}
   Show that the bit complexity of Euclid's algorithm, using the school method
@@ -87,29 +94,46 @@ You might have seen the following recurrence:
   algorithm? Why or why not?
 \end{exercise}
 \begin{proof}
-		\begin{algorithm}[b]
-				\caption{A function $f$ using recursive algorithm.}
-				\KwIn{input parameters $n,k$}
-				\KwOut{$ {n\choose k }$}
-				\LinesNumbered
-				\If{$n=k$ or $k=0$} {
-						return $1$
-				} 
-				\Else {
-						return $f\left( n-1,k-1 \right) + f\left( n-1,k \right) $
-				}
-		\end{algorithm}
-		The python implementation
-\begin{verbatim}
-		def f(n,k):
-			if n < k:
-				return 0
-			elif n == k or k == 0:
-				return 1
-			else:
-				return f(n-1,k-1)+f(n-1,k)
-\end{verbatim}
-		It's not a good algorithm.
+recursive code: 
+\begin{python}
+def recursiveCompute(n, k):
+    if (n <= k or k == 0):
+        return 1
+    else:
+        return recursiveCompute(n - 1, k - 1) + recursiveCompute(n - 1, k)
+\end{python}
+
+Like recursive algorithm for computing Fib(n), we can get a recursive tree, 
+which has $ \binom n k$ leaves and $ \left(2 \binom n k - 1\right) $ nodes in all. 
+We can prove it by induction.
+
+Firstly, prove it for a fixed n, to do that, we use an induction. 
+And suppose the equation is true for all $m < n$ (base $n = 1$ is trivial).\\
+\textbf{Base:} $k = 0:$
+
+Obviously, the recursive tree only has 1 node, which satisfies the equation.\\
+\textbf{Induction:} 
+
+To compute $\binom n {k+1} $, we will add a node for $\binom n {k+1}$ as the new root,
+and two sub recursive tree for computing $\binom {n - 1} {k}, \binom {n - 1}{k + 1}$, 
+whose nodes size is known by induction hypothesis.
+The new tree has 
+\[
+\binom {n-1} {k} + \binom{n - 1} {k + 1} = \binom{n}{k + 1}
+.\] 
+leaves, and
+\[
+\left(2\binom{n - 1}{k} - 1 \right)+ \left(2\binom{n - 1}{k + 1} -1\right) + 1
+= 2\binom n {k + 1} - 1 
+.\] 
+nodes.
+
+Similar to the induction above, we can tell for any $n, k$, the result holds.
+For the running time analysis, each node in the tree needs to do an addition,
+so it's $O\left(2 \binom n k - 1\right)= O\left( \binom{n}{k}  \right) $.
+
+It's not a good algorithm, since the time complexity is very high, and it does a lot of 
+redundant addition.
 \end{proof}
 \begin{exercise}[A Dynamic Programming Algorithm for the Binomial Coefficient]
   Using pseudocode, write a dynamic programming algorithm
@@ -118,19 +142,24 @@ You might have seen the following recurrence:
   Would you say your algorithm is efficient? Why or why not?
 \end{exercise}
 \begin{proof}
-		\begin{algorithm}[h]
-				\caption{A function $g$ using dynamic algorithm.}
-				\KwIn{input parameters $n,k$}
-				\KwOut{$ {n\choose k }$}
-				\LinesNumbered
-				\If{$n=k$ or $k=0$} {
-						return $1$
-				} 
-				\Else {
-						return $f\left( n-1,k-1 \right) + f\left( n-1,k \right) $
-				}
-				
-		\end{algorithm}
+code:
+\begin{python}
+def dpCompute(n, k):
+    a = [[0 for x in range(k + 1)] for y in range(n + 1)] 
+    for i in range (n + 1):
+        a[i][0] = 1
+        for j in range (1, min(i, k) + 1):
+            a[i][j] = a[i - 1][j - 1] + a[i - 1][j]
+    return a[n][k]
+\end{python}
+The algorithm needs to do $n$ iterations, in each iteration, it needs to do 
+$\mathrm{min}  (i, k)$ additions. In all, we need 
+\[
+    \sum_{i = 1}^k\sum_{j = 1}^i C + \sum_{i = k + 1}^nk C 
+    = k(k + 1)/2 + k(n - k) 
+    = \left(n + \frac{1}{2}\right)k - \frac{1}{2}k^2
+\]
+In all it's roughly a $O(n^2)$ algorithm.
 \end{proof}
 
 \begin{exercise}[Binomial Coefficient modulo 2]
@@ -141,7 +170,55 @@ You might have seen the following recurrence:
   is efficient? Why or why not?
 \end{exercise}
 \begin{proof}
-		
+The running time is exactly the same as Exer.4.,
+not efficcient, we don't have to compute the value of $\binom n k$ at all.\\
+Below is the python code.
+\begin{python}
+def hasNtwoFactor(asking):
+    res = 0
+    while (asking % 2 == 0):
+        res += 1
+        asking = asking / 2
+    return res
+
+def isEvenOrOdd(n, k):
+    numerator = 0
+    dominator = 0
+    for i in range(1, n + 1):
+        numerator += hasNtwoFactor(i)
+    for i in range(1, k + 1):
+        dominator += hasNtwoFactor(i)
+    for i in range(1, n - k + 1):
+        dominator += hasNtwoFactor(i)
+    if (numerator - dominator > 0):
+        return bool(1)
+    else:
+        return bool(0)
+\end{python}
+it's an $O(n)$ algorithm, faster than dpCompute.
+
+We also have another algorithm based on \textbf{Lucas Theorem} 
+\begin{python}
+def C(n, k):
+	if n & k == k:
+        return 1;
+    else:
+        return 0;
+\end{python}
+
+Now, let's proof this simple algorithm why it's correct.
+\begin{theorem}
+	\textbf{(Lucas Theorem)} For non-negative integers \textit{m} and \textit{n} and a prime \textit{p}, the following congruence relation holds:
+	$${m \choose n} \equiv \prod_{i=0}^k {m_i \choose n_i} ( mod\ p),$$
+	where
+	$$m=m_kp^k+m_{k-1}p^{k-1}+\cdots+m_1p+m_0$$,
+	and
+	$$n=n_kp^k+n_{k-1}p^{k-1}+\cdots+n_1p+n_0$$
+	are the base p expansions of m and n respectively. This uses the convention that ${m\choose n}=0$ if $m<n$.
+\end{theorem}
+Here, we let p = 2, and we have ${0 \choose 0}={1\choose 0}={1 \choose 1}=1$ and ${0 \choose 1}=0$. Hence, we get ${n\choose k}\equiv 1 (mod\ 2)$ if and only if every bit of k is less than that of n in binary representation. That means $n\ and\ k = k$.
+
+The time complexity of this algorithm is $\Theta(log(n))$
 \end{proof}
 \begin{exercise}
   Remember the ``period'' algorithm for computing $F'_n := (F_n \mod k)$ discussed in class:
@@ -179,12 +256,33 @@ You might have seen the following recurrence:
 \end{proof}
 
 
+\newpage
+{\huge\noindent \textbf{Appendix}   \\ \\ } 
+{\large Pseudocode for Exercise 3, 4}
+\begin{algorithm}[h]
+		\caption{A function $f$ using recursive algorithm.}
+		\KwIn{input parameters $n,k$}
+		\KwOut{$ {n\choose k }$}
+		\LinesNumbered
+		\If{$n=k$ or $k=0$} {
+				return $1$
+		} 
+		\Else {
+				return $f\left( n-1,k-1 \right) + f\left( n-1,k \right) $
+		}
+\end{algorithm}
 
-\paragraph{Python.} Please write your code in python. It is a very simple programming
-language. If you do not know any python, I can put same example code online and 
-you can learn by example. Also, for this homework you definitely need a Big Integer class
-since numbers with ten thousand digits do not fit into any \texttt{long long int} or similar.
-Python automatically supports Big Integer, so there is no problem here.
+\begin{algorithm}[h]
+		\caption{A function $g$ using dynamic algorithm.}
+		\KwIn{input parameters $n,k$}
+		\KwOut{$ {n\choose k }$}
+		\LinesNumbered
+		\If{$n=k$ or $k=0$} {
+				return $1$
+		} 
+		\Else {
+				return $f\left( n-1,k-1 \right) + f\left( n-1,k \right) $
+		}
 
-
+\end{algorithm}
 \end{document}
