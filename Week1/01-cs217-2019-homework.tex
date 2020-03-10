@@ -1,11 +1,22 @@
 
 \documentclass[12pt,a4]{article}
 \author{Yujie Lu \quad Jiabao Ji \quad Tong Chen}
-
 \newcommand{\handoutdate}{2020-03-05}
 \newcommand{\firstduedate}{2020-03-10}
 \newcommand{\finalduedate}{2020-03-17 before class}
 \usepackage{pythonhighlight}
+\usepackage{import}
+\usepackage[many]{tcolorbox}
+\tcbuselibrary{skins, breakable, theorems}
+\tcolorboxenvironment{exercise}{
+  enhanced,
+  borderline={0.4pt}{0.4pt}{black},
+  boxrule=0.4pt,
+  colback=white,
+  coltitle=black,
+  sharp corners,
+}
+
 \input{preamble}
 
 \section{Bit Complexity, Recursion, and Dynamic Programming}
@@ -148,7 +159,7 @@ def dpCompute(n, k):
     a = [[0 for x in range(k + 1)] for y in range(n + 1)] 
     for i in range (n + 1):
         a[i][0] = 1
-        if (i <= n - k):
+        if i <= n - k:
             for j in range (1, min(i, k) + 1):
                 a[i][j] = a[i - 1][j - 1] + a[i - 1][j]
         else:
@@ -156,17 +167,26 @@ def dpCompute(n, k):
                 a[i][j] = a[i - 1][j - 1] + a[i - 1][j]
     return a[n][k]
 \end{python}
-The algorithm needs to do $n$ iterations, for iterations $i <= n - k$, 
-we should do $min(i, k)$ additions, and for $i > n - k$, we should do $min(i, k) - i - (n - k)$ additions
-(since there is no node of $\binom i j (i > n - k, j < i - (n - k))$ in the recursive tree)
+The algorithm needs to do $n$ iterations, for iterations $i \le  n - k$, 
+we should do $\mathrm{min}  (i, k)$ additions, and for $i > n - k$, we should do $\mathrm{min} (i, k) - i - (n - k)$ additions
+(since there is no node of $\binom i j $ if $ i > n - k, j < i - (n - k)$ in the recursive tree)
 In all, we need to compute
 $$
-    \sum_{i = 1}^{n - k} \sum_{j = 1}^{min(i, k)} + 
-    \sum_{i = n - k + 1}^{n + 1}\sum_{j = i - (n - k)}^{min(i, k) + 1}
+    \sum_{i = 1}^{n - k} \sum_{j = 1}^{min(i, k)} 1 + 
+    \sum_{i = n - k + 1}^{n + 1}\sum_{j = i - (n - k)}^{min(i, k) + 1} 1
     = n (n - k)
 $$
-additions. \\
-\hspace*{1em} Consider the cost of each addition, the algorithm is $\Omega(n(n - k))$ and $O(n(n - k) log \binom n k)$.
+additions. 
+
+This is not trivial, so we draw a picture to better visualize this
+\begin{figure}[ht]
+    \centering
+	\incfig[0.8]{triangle}
+    \caption{How much do we compute.}
+    \label{fig:triangle}
+\end{figure}
+
+Consider the cost of each addition, the algorithm is $\Omega(n(n - k))$ and $O(n(n - k) log \binom n k)$.
 It's much more efficcient than the recursive algorithm. I think it's efficcient.
 
 
@@ -292,12 +312,22 @@ The time complexity of this algorithm is $\Theta(log(n))$
 		\KwIn{input parameters $n,k$}
 		\KwOut{$ {n\choose k }$}
 		\LinesNumbered
-		\If{$n=k$ or $k=0$} {
-				return $1$
-		} 
-		\Else {
-				return $f\left( n-1,k-1 \right) + f\left( n-1,k \right) $
-		}
+		a is a 2d array to store results.
 
+		\For{$i$ in  $\{1,2,\ldots,n+1\} $ } {
+				a[i][0] = 1
+				\If {$i\le n-k $ } {
+						\For{$j\le   \mathrm{min}\left( i,k \right) $ }
+						{
+								update a[i][j]
+						}
+				} 
+				\Else {
+						\For {$j \le   \mathrm{min}\left( i,k \right)  \} $} {
+								update a[i][j]
+						}
+				}
+		}
+		return a[n][k]
 \end{algorithm}
 \end{document}
