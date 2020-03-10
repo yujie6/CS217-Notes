@@ -148,18 +148,28 @@ def dpCompute(n, k):
     a = [[0 for x in range(k + 1)] for y in range(n + 1)] 
     for i in range (n + 1):
         a[i][0] = 1
-        for j in range (1, min(i, k) + 1):
-            a[i][j] = a[i - 1][j - 1] + a[i - 1][j]
+        if (i <= n - k):
+            for j in range (1, min(i, k) + 1):
+                a[i][j] = a[i - 1][j - 1] + a[i - 1][j]
+        else:
+            for j in range(i - (n - k), min(i, k) + 1):
+                a[i][j] = a[i - 1][j - 1] + a[i - 1][j]
     return a[n][k]
 \end{python}
-The algorithm needs to do $n$ iterations, in each iteration, it needs to do 
-$\mathrm{min}  (i, k)$ additions. In all, we need 
-\[
-    \sum_{i = 1}^k\sum_{j = 1}^i C + \sum_{i = k + 1}^nk C 
-    = k(k + 1)/2 + k(n - k) 
-    = \left(n + \frac{1}{2}\right)k - \frac{1}{2}k^2
-\]
-In all it's roughly a $O(n^2)$ algorithm.
+The algorithm needs to do $n$ iterations, for iterations $i <= n - k$, 
+we should do $min(i, k)$ additions, and for $i > n - k$, we should do $min(i, k) - i - (n - k)$ additions
+(since there is no node of $\binom i j (i > n - k, j < i - (n - k))$ in the recursive tree)
+In all, we need to compute
+$$
+    \sum_{i = 1}^{n - k} \sum_{j = 1}^{min(i, k)} + 
+    \sum_{i = n - k + 1}^{n + 1}\sum_{j = i - (n - k)}^{min(i, k) + 1}
+    = n (n - k)
+$$
+additions. \\
+\hspace*{1em} Consider the cost of each addition, the algorithm is $\Omega(n(n - k))$ and $O(n(n - k) log \binom n k)$.
+It's much more efficcient than the recursive algorithm. I think it's efficcient.
+
+
 \end{proof}
 
 \begin{exercise}[Binomial Coefficient modulo 2]
@@ -170,32 +180,37 @@ In all it's roughly a $O(n^2)$ algorithm.
   is efficient? Why or why not?
 \end{exercise}
 \begin{proof}
-The running time is exactly the same as Exer.4.,
-not efficcient, we don't have to compute the value of $\binom n k$ at all.\\
-Below is the python code.
-\begin{python}
-def hasNtwoFactor(asking):
-    res = 0
-    while (asking % 2 == 0):
-        res += 1
-        asking = asking / 2
-    return res
-
-def isEvenOrOdd(n, k):
-    numerator = 0
-    dominator = 0
-    for i in range(1, n + 1):
-        numerator += hasNtwoFactor(i)
-    for i in range(1, k + 1):
-        dominator += hasNtwoFactor(i)
-    for i in range(1, n - k + 1):
-        dominator += hasNtwoFactor(i)
-    if (numerator - dominator > 0):
-        return bool(1)
-    else:
-        return bool(0)
-\end{python}
-it's an $O(n)$ algorithm, faster than dpCompute.
+  The running time is similar to Exer.4, but since we only needs to know whether the result modula 2 is 1 or 0,
+  we don't need to compute addition at each node but only a bool compute. \\
+  \hspace*{1em} So the dynamic algorithm is $\Theta (n(n - k))$.\\
+  \hspace*{1em} To this question specifically,not efficcient, 
+  we don't have to compute the value of $\binom n k$ at all.\\
+  Below is the python code.
+  \newpage
+  \begin{python}
+  def hasNtwoFactor(asking):
+      res = 0
+      while (asking % 2 == 0):
+          res += 1
+          asking = asking / 2
+      return res
+  
+  def isEvenOrOdd(n, k):
+      numerator = 0
+      dominator = 0
+      for i in range(1, n + 1):
+          numerator += hasNtwoFactor(i)
+      for i in range(1, k + 1):
+          dominator += hasNtwoFactor(i)
+      for i in range(1, n - k + 1):
+          dominator += hasNtwoFactor(i)
+      if (numerator - dominator > 0):
+          return bool(1)
+      else:
+          return bool(0)
+  \end{python}
+  it's an $\Theta(n log(n))$ algorithm, faster than dpCompute.
+  
 
 We also have another algorithm based on \textbf{Lucas Theorem} 
 \begin{python}
