@@ -43,8 +43,9 @@ so the bits of $r$, we write it as $b_r$. $b_r < k$.
 Remind the procedure of brute-force algorithm of $a \% b$, in each iteration,
 $n$ decreases(since we can drop the higher bits). In the final iteration, $n < k$,
 also this $n$ is exactly $b_r$, so we don't need to do the iteration $n$ times,
-but only $n - k$ times. And each iteration costs $n$ subtraction operation, which is an integer operation,
-in all we do no more than $n(n - k)$ times of basic operations.
+but only $n - k + 1$ times. And each iteration costs $k$ subtraction operation, which is an integer operation,
+in all we do no more than $k(n - k+ 1)$ times of basic operations. That is 
+$O\left( k\left( n-k \right)  \right) $ basic operations.
 \end{proof}
 \begin{exercise}
   Show that the bit complexity of Euclid's algorithm, using the school method
@@ -142,7 +143,14 @@ nodes.
 Similar to the induction above, we can tell for any $n, k$, the result holds.
 For the running time analysis, each node in the tree needs to do an addition,
 so it's $O\left(2 \binom n k - 1\right)= O\left( \binom{n}{k}  \right) $.
+If we consider the cost of addition at each node: $\log \binom{n}{k}$, we get
+$O((\binom n k )log(\binom n k))$.
 
+To sum up, the algorithm's time complexity is 
+\[ 
+		\Omega\left(\binom n k\right)\text{ and } O\left(\binom n k \log\left
+		(\binom n k\right)\right).
+\]
 It's not a good algorithm, since the time complexity is very high, and it does a lot of 
 redundant addition.
 \end{proof}
