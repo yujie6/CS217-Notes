@@ -56,28 +56,65 @@ $Induction: n = k \rightarrow n = k + 1$
 
 \subsection*{Exer.3:}
 \begin{python}
-    def ComputeSecondMax(A):
+class Node:
+    def __init__(self, weight, father, biggerSon, smallerSon):
+        self.weight = weight
+        self.father = father
+        self.biggerSon = biggerSon
+        self.smallerSon = smallerSon
+
+def ComputeSecondMax(A):
         # A should be an array with 2^k elements
+        comparisons = 0
         n = len(A)
         k = math.floor(math.log(n, 2))
-        MaxCandidate = A
+        MaxCandidate = []
+        for x in A:
+            MaxCandidate.append(Node(x, None, None, None))
         for _ in range(k):
             tmpMaxCandidate = []
             for j in range(len(MaxCandidate) // 2):
                 x = MaxCandidate[2 * j]
                 y = MaxCandidate[2 * j + 1]
-                if (x < y):
-                    tmpMaxCandidate.append(y)
+                if (x.weight < y.weight):
+                    comparisons += 1
+                    newNode = Node(y.weight, None, y, x)
+                    tmpMaxCandidate.append(newNode)
+                    x.father = newNode
+                    y.father = newNode
                 else:
-                    tmpMaxCandidate.append(x)
+                    comparisons += 1
+                    newNode = Node(x.weight, None, x, y)
+                    tmpMaxCandidate.append(newNode)
+                    x.father = newNode
+                    y.father = newNode
             MaxCandidate = tmpMaxCandidate
-        return MaxCandidate[0]
+
+        res = 0
+        curNode = MaxCandidate[0]
+        for _ in range(k):
+            if curNode.smallerSon.weight > res :
+                res = curNode.smallerSon.weight
+                comparisons += 1
+            comparisons += 1
+            curNode = curNode.biggerSon
+        return comparisons, res
 \end{python}
-    The algorithm is similar to the one in $Exer.2$, we can divide the original array for $k$ times, each time, we 
+    \hspace*{1em} The algorithm is similar to the one in $Exer.2$, we can divide the original array for $k$ times, each time, we 
     get the bigger element from consecutive 2 elements in the last iteration. The array size is $2^k, 2^{k - 1}...2^{1}$
-    And it takes $2^i - 1$ comparisons for $2^i$ size array.
-    In all we do $1 + 2 + 2^2 +... + 2^{k - 1} = 2^k = n$ comparisons.\\
-    FixMe: 存疑。。
+    And it takes $2^i - 1$ comparisons for $2^i$ size array. But to get the second max element we still need to do something else.
+    \newpage
+    \begin{figure}[h]
+        \centering
+        \includegraphics[]{2-wayTree.png}
+        \caption{Comparing Tree in Exer.3}
+    \end{figure}
+    \hspace*{1em}After $k$ iterations of comparing consecutive elements, we constructed the comparing tree above.
+    Obviously, the maximal element floats up from bottom to top, and the candidates for second maximal element
+    are those who once compared to the maximal element in the tree, 4 and 7 in above specific tree, for example.\\
+    \hspace*{1em}So we need to compare another $log_2(n) - 1$ times to get the maximal element in the candidates since maximal element 
+    needs to be compared for $log_2(n)$ times to float to top.\\
+    \hspace*{1em}In all we do $1 + 2 + 2^2 +... + 2^{k - 1} + log_2(n) = n + log_2(n)$ comparisons.\\
 
 \subsection*{Exer.4:}
     From the sum equation in the class, we can derive the result as follows.
