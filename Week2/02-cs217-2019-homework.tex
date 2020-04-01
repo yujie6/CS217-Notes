@@ -30,13 +30,23 @@
    on some inputs.
 \end{exercise}
 \begin{proof}
-Prove it by induction on the length of array, denote the length as $n$ and elements $a_i(1 \leq i \leq n)$.\\
-$Base: n = 1$\\
-    \hspace*{1em}Obviously, $a_1$ itself is the maximal element, no comparison is needed at all.\\
-$Induction: n = k \rightarrow n = k + 1$
-    As for $a_1, a_2, ... , a_{k}$, the minimal comparison it takes is $k - 1$, by induction hypothesis.
-    Suppose the maximal element in $a_1...a_{k}$ is $b$, since we don't know whether $b > a_k$, we have to
-    do another comparison. In all, we do $k - 1 + 1 = k$ comparisons for $n = k + 1$. 
+    First, consider taking $n - 2$ comparisons.
+    If we list the $n - 2$ comparisons like below, and we get the maximal $M$ from them.
+    $$
+        a_{i_1} \leq a_{j_1},
+        a_{i_2} \leq a_{j_2},
+        \dots
+        a_{i_{n -2}} \leq a_{j_{n - 2}}
+    $$
+
+    For smaller array $a_{i_1}, a_{i_2}, ... a_{i_{n - 2}}$, there are at most $n - 2$ different element from
+    the original array. Choose 2 in the others as $a_{x}, a_{y}$, at least one of them is not maximal,
+    suppose $a_{x}$ is not maximal, then if we change $a_x$ to $a_{x} = M + 1$, the new array still suffices 
+    the $n - 2$ comparisons, but the maximal is not $M$ anymore.
+
+    Next, if we take $m < n - 2$ comparisons, the proof is similar to the case above. The smaller array
+    has at most $m$ different elements, and at least $n - m$ element are not in the smaller part, we can still
+    choose one from them not maximal, and change it to maximal + 1, leading to the parodox.
 \end{proof}
 
 \begin{exercise}
@@ -138,7 +148,6 @@ $Induction: n = k \rightarrow n = k + 1$
         \hspace*{1em} The algorithm is similar to the one in $Exer.2$, we can divide the original array for $k$ times, each time, we 
         get the bigger element from consecutive 2 elements in the last iteration. The array size is $2^k, 2^{k - 1}...2^{1}$
         And it takes $2^i - 1$ comparisons for $2^i$ size array. But to get the second max element we still need to do something else.
-        \newpage
         \begin{figure}[h]
             \centering
             \includegraphics[]{2-wayTree.png}
