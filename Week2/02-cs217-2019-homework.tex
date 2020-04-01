@@ -368,17 +368,17 @@ subtree of $T(\pi)$ rooted at $i$.
 				S_1+S_2-S_3 &= 2n + 8 + 2\left( n+1 \right) H_{n}
 				- \left( 2k+5 \right) H_{k} 
 				-\left( 2n-2k+6 \right) H_{n-k+1} \\
-							&\approx  O\left( n \right) + 
+							&\approx 2n+ O\left( 1 \right) + 
 							2 \left( 
 							nH_{n}-kH_{k} - \left( n-k \right) H_{n-k+1} 
 							\right)  \\
-							&\approx O\left( n \right) + 2n \left( 
+							&\approx 2n + O\left( 1 \right) + 2n \left( 
 							\log n -\frac{k}{n} \log k - \log\left( n-k+1 \right) 
 					 + \frac{k}{n}\log\left( n-k+1 \right)   \right)  \\
-							&= O\left( n \right)  + 2n\left( 
+							&= 2n + O\left( 1 \right)  + 2n\left( 
 							\log\left( \frac{1}{1-\kappa+\frac{1}{n} } \right) 
 					-\kappa \log\left( \frac{\kappa}{1-\kappa + \frac{1}{n}}  \right)  \right) \\ 
-							&= O\left( n \right) + 2\lambda n 
+							&= 2n + O\left( 1 \right) + 2\lambda n 
 		.\end{align*}
 		Now we only need to consider the size of $\lambda$, since $\kappa \in (0,1]$,  
 		and $\frac{1}{n} \to 0$ when $n$ is large
@@ -406,11 +406,15 @@ subtree of $T(\pi)$ rooted at $i$.
 		$\frac{k}{n} = \frac{1}{2}$, we have:
 		\[
 				\mathbb{E} \left[ C\left( \pi,k \right)  \right] = 
-				n\left( 2+\log 2+ O\left( 1 \right)  \right) 
+				n\left( 2+\log 2  \right) 
 		.\] 
-		In a word, the running time is exactly $O\left( n \right) $. But 
-		the constant may varies from the value of $k$, while $k$ get
-		closer to $\frac{n}{2}$, the constant will be closer to $2+\log 2$.
+		In a word, the running time is $O\left( n \right) $. Plus the 
+		\textbf{exact coeffient} is 
+		\[
+		C = 2 + 2\lambda = 2 - 2 \left( 1- \kappa \right) \log\left( 1-\kappa \right) - 2\kappa \log \kappa 
+		.\] 
+		which may varies from $2$ to $2+ 2\log 2$, while $k$ get
+		closer to $\frac{n}{2}$, the constant will be closer to $2+2\log 2$.
 \end{proof}
 
 \end{document}
