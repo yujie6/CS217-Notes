@@ -104,7 +104,11 @@
         $result = $ ComputeSpanningTreeNumber($T$)\;
         \KwRet{$result$}
         \caption{Compute number of $MST$}
-       \end{algorithm}
+    \end{algorithm}
+    
+    The running time for this algorithm is really simple, since we know that $Kruskal$ and $ComputeSpanningTreeNumber$
+    are polynomial-time. And finding $toMergeEdges$ need at most $|E|^2$ comparisons,namely $O(|E|^2)$, the merge for $T(E)$ and $toMergeEdges$
+    is $O(|E|)$. In all running time is the sum of these polynomial subroutines, so in all the running time is polynomial.
 
 \end{document}
 
