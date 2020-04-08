@@ -223,31 +223,41 @@ different:
 
     We know that during the process of $Kruskal's$ algorithm, it gets the edges with different weights
     of an $MST$. Having these weights, we can get all other $candidate$ edges for another $MST$ as long 
-    as its weight is the same as one of the known $MST$'s edge's. After that, we construct a subgraph $g$
-    of graph $G$, and each spanning tree of $g$ is a $MST$ of $G$. Call the magic algorithm, we get the number
-    of spanning tree of $g$, which is also the number of $MST$s of $G$. The pseudocode is shown below.
+    as its weight is the same as one of the known $MST$'s edge's. We can solve all edges with the same weight together.
+    Every time, for a paticular weight, construct an abstract graph $G^*$ with the represented point and the edge connected
+    different connponent in that weight. Then we use that polynomial-time magic algorithm(since i know it's according to 
+    Matrix-Tree Theorem) to calculate the answer. And then merge different conponent. Finally we multiplicate the answer
+    for every type of edges.
 
     \begin{algorithm}[H]
         \KwData{graph $G$}
         \KwResult{number of $MST$s of $G$}
-        $T$ = Kruskal($G$)\;
-        $toMergeEdges$ = $ \emptyset$ \; 
-        \For{$e \in T(E)$} {
-            \For {$e_{tmp} \in G(E)$} {
-                \If {$e.weight == e_{tmp}.weight$ {\bf and} $e \neq e_{tmp}$} {
-                    $toMergeEdges = toMergeEdges \cup e_{tmp}$\;
-                }
+        sort($E$)\;
+        $Ans$ = 1 \;
+        \For{$e \in E$} {
+		$EdgeLayer = \{(Find(e.a), Find(e.b))\}$ \;
+		$PointLayer=\{Find(e.a), Find(e.b)\}$\;
+		$nowe=e.weight$\;
+		$e = next(e)$\;
+            \While {$e.weight == nowe$} {
+            		$EdgeLayer=EdgeLayer\cup (Find(e.a), Find(e.b))$\;
+            		$PointLayer=PointLayer\cup \{Find(e.a), Find(e.b)\}$\;
+            		$e=next(e)$\;
             }
+            Ans *= ComputeSpanningTreeNumber(PointLayer, EdgeLayer)\;
+		\For {$e2 \in EdgeLayer$}{
+			Merge(e2.a, e2.b)\;
+			}
         }
-        $T(E) = T(E) \cup toMergeEdges $\;
-        $result = $ ComputeSpanningTreeNumber($T$)\;
-        \KwRet{$result$}
+	 \If{$NotConnected(G)$} {
+	 	$Ans=0$\;
+	 }
+        \KwRet{$Ans$}
         \caption{Compute number of $MST$}
     \end{algorithm}
     
-    The running time for this algorithm is really simple, since we know that $Kruskal$ and $ComputeSpanningTreeNumber$
-    are polynomial-time. And finding $toMergeEdges$ need at most $|E|^2$ comparisons,namely $O(|E|^2)$, the merge for $T(E)$ and $toMergeEdges$
-    is $O(|E|)$. In all running time is the sum of these polynomial subroutines, so in all the running time is polynomial.
+    The running time for this algorithm is really simple, since we know that $ComputeSpanningTreeNumber$
+    is polynomial-time. And we divide the edges at most $|E|$ layers, so in all the running time is polynomial.
 \end{proof}
 
 
