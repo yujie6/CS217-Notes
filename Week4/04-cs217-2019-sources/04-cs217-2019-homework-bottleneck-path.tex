@@ -1,0 +1,57 @@
+\documentclass[12pt,a4]{article}
+
+
+\newcommand{\handoutdate}{Thursday, 2019-10-10}
+\newcommand{\firstduedate}{Monday, 2019-10-14}
+\newcommand{\finalduedate}{Monday, 2019-10-21}
+
+
+
+\input{preamble}
+
+
+
+\setcounter{section}{3}
+
+\section{Bottleneck Paths}
+
+Let $G=(V,E)$ be a directed graph with an edge capacity function $c: E \rightarrow \R^+$. For a path
+$p = u_0 u_1 \dots u_t$ define its {\em capacity} to be
+\begin{align}
+   c(p) := \min_{1 \leq i \leq t} c( \{u_{i-1}, u_i\}) \ .
+\end{align}
+
+\begin{quotation}
+    \textbf{Maximum Capacity Path Problem (MCP).} Given a directed graph $G = (V,E)$, an edge capacity function
+    $c: E \rightarrow \R^+$, and two vertices $s, t \in V$, compute the path $p^*$ maximizing $c(p)$. We
+    denote by $p^*$ the optimal path and by $c^* := c(p^*)$ its cost. 
+\end{quotation}
+
+
+
+\begin{exercise}
+   Suppose the edges $e_1,\dots,e_m$ are sorted by their cost. Show how to solve MCP in time $O(n+m)$.
+\end{exercise}
+
+\begin{exercise}
+   Give an algorithm for MCP of running time $O(m \log \log m)$. \textbf{Hint:} Using the median-of-medians algorithm,
+   you can determine an edge $e$ such that at most $m/2$ edges are cheaper than $e$ and at most $m/2$ edges are
+   more expensive than $e$. Can you determine, in time $O(n+m)$, whether $c^* < c(e)$, $c^* = c(e)$, or $c^* > c(e)$?
+   Iterate to shrink the set of possible
+    values for $c^*$ to $m/4$, $m/8$, and so on.
+\end{exercise}
+
+\begin{exercise}
+   Give an algorithm for MCP that runs in time $O(m \log \log \log m)$? How about $O(m \log \log \log \log m)$? How far can you get?
+\end{exercise}
+
+
+
+\begin{exercise}
+   Suppose we modify the Ford-Fulkerson method so that, in every round, it finds a path of {\em maximum capacity}, as opposed
+   to be shortest-$s-t$-path method employed by Edmonds-Karp. Show that this algorithm terminates after a number of rounds that is 
+   polynomial in $n$ and $m$.
+\end{exercise}
+
+
+\end{document}
