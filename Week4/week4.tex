@@ -100,18 +100,20 @@ E_1= \{e \mid c\left( e \right) \le M,e\in E'\},
 	\begin{algorithm}[H]
 		\caption{Solve MCP in time $n\log\log n$ }
 		\begin{algorithmic}
-				\While {$t < \log s\left( m \right) $ }
+				\State $i=0, U = \infty, L = 0$
+				\While {$i < \log s\left( m \right) $ }
 				\State Determine the median of $\{e \mid e\in E',c\left( e \right) \le U\} $.
 				\If $\left( V,E_2 \right) $ is $s$- $t$ connected 
 				\State $E' \leftarrow E_2, L = M$,
 				\Else 
 				\State $U = M$
 				\EndIf
-
+				\State $i=i+1$
 				\EndWhile	
 				\State Number $t$ edges in set $\{e \in E' \mid c\left( e \right) \le U\} $ according to increasing order $e_1,e_2,\ldots.$
 				\State Solve instance by \textbf{Algorithm 1} with the following 
-				ordering \[
+				ordering, i.e. the place of $e$ in the sorted array 
+				\[
 						l\left( e \right) = \begin{cases}
 								1, \quad c\left( e \right) \le L \\
 								i, \quad  \exists i,e =e_{i} \\
@@ -159,7 +161,7 @@ Hence
 		to maintain $\{ e  \mid  e\in E', c\left( e \right) \le U \} $.
 
 		But can we do better? I think it depends on how fast the sorting or 
-		priority queue could run, and currently there seems no better result.
+		priority queue could run, and currently it seems that there is no better result.
 \end{proof}
 
 \end{document}
