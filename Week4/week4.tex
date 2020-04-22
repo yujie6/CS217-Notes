@@ -1,8 +1,8 @@
 \documentclass[12pt,a4]{article}
 
-\newcommand{\handoutdate}{Thursday, 2019-10-10}
-\newcommand{\firstduedate}{Monday, 2019-10-14}
-\newcommand{\finalduedate}{Monday, 2019-10-21}
+\newcommand{\handoutdate}{Friday, 2020-04-17}
+\newcommand{\firstduedate}{Friday, 2019-04-24}
+\newcommand{\finalduedate}{Tuesday, 2020-05-01}
 
 
 \input{preamble}
@@ -154,14 +154,27 @@ Hence
 \end{exercise}
 \begin{proof}
 		We can have a better algorithm runs in $O\left( m \log\log\log m \right) $, 
-		since there is no need to sort the $t$ edges. In \textbf{Algorithm 1} 
-		we just choose edges from large to small one by one, hence we can just use a 
-		complex priority queue\footnote{ only supoort \texttt{insert} and \texttt{find\_max}, \texttt{delete\_max} actions, check this paper for detail: \texttt{On RAM priority queues}. }
+		since there is no need to sort the $t$ edges in $O\left( t\log t \right) $. 
+		We can just use a 
+		complex priority queue\footnote{ only supoort \texttt{insert} and \texttt{extract\_max} actions, check this paper for detail: \texttt{On RAM priority queues}. }
 		with running time of insertion $O\left( \log\log n \right) $ 
 		to maintain $\{ e  \mid  e\in E', c\left( e \right) \le U \} $.
+		
+		It is worth mentioning that the above algorithm only works in 
+		\textbf{RAM model of computing}, which means that the $c\left( e \right) $ 
+		only occupies one word of space in our computer.
+		More details refer to wiki of \textbf{integer sorting}. 
 
 		But can we do better? I think it depends on how fast the sorting or 
-		priority queue could run, and currently it seems that there is no better result.
+		priority queue could run, and currently it seems that there 
+		is no better result i.e. an $O\left( n\log\log\log n \right) $ sorting 
+		algorithm.
+
+		To sum up, if we use \textbf{RAM model of computing}, we can  
+		exactly
+		reach $O\left( m\log\log\log m \right) $ running time, but if 
+		$c\left( e \right) ,\forall e$ could be arbitrarily large, for example 
+		$\Theta\left( n^2 \right) $, we can not improve the result.
 \end{proof}
 
 \end{document}
