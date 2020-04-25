@@ -103,7 +103,7 @@ E_1= \{e \mid c\left( e \right) \le M,e\in E'\},
 				\State $i=0, U = \infty, L = 0$
 				\While {$i < \log s\left( m \right) $ }
 				\State Determine the median of $\{e \mid e\in E',c\left( e \right) \le U\} $.
-				\If $\left( V,E_2 \right) $ is $s$- $t$ connected 
+				\If{ $\left( V,E_2 \right) $ is $s$- $t$ connected }
 				\State $E' \leftarrow E_2, L = M$,
 				\Else 
 				\State $U = M$
@@ -142,7 +142,7 @@ now we choose $s\left( m \right) = \log m $ to minimize the time which is
 .\] 
 Hence 
 \[
-		T =O \left( \frac{m}{\log m} \log \left( \frac{m}{\log m } \right) \right) + 
+		T =O\left( m \log\log m \right) + O \left( \frac{m}{\log m} \log \left( \frac{m}{\log m } \right) \right) + 
 		O \left( \log m \right) 
 		= O\left( m\log\log m  \right) 
 .\] 
@@ -153,28 +153,54 @@ Hence
    Give an algorithm for MCP that runs in time $O(m \log \log \log m)$? How about $O(m \log \log \log \log m)$? How far can you get?
 \end{exercise}
 \begin{proof}
-		We can have a better algorithm runs in $O\left( m \log\log\log m \right) $, 
-		since there is no need to sort the $t$ edges in $O\left( t\log t \right) $. 
-		We can just use a 
-		complex priority queue\footnote{ only supoort \texttt{insert} and \texttt{extract\_max} actions, check this paper for detail: \texttt{On RAM priority queues}. }
-		with running time of insertion $O\left( \log\log n \right) $ 
-		to maintain $\{ e  \mid  e\in E', c\left( e \right) \le U \} $.
-		
-		It is worth mentioning that the above algorithm only works in 
-		\textbf{RAM model of computing}, which means that the $c\left( e \right) $ 
-		only occupies one word of space in our computer.
-		More details refer to wiki of \textbf{integer sorting}. 
+		We can have a better algorithm runs in $O\left( m \log\ldots\log m \right) $ (arbitrary number of log), 
 
-		But can we do better? I think it depends on how fast the sorting or 
-		priority queue could run, and currently it seems that there 
-		is no better result i.e. an $O\left( n\log\log\log n \right) $ sorting 
-		algorithm.
+		Consider a set of edge $E$ with $\frac{m}{k}$ elements. We apply  \textbf{median of median} algorithm
+		$k$ rounds. Each round we break one block into 2 parts. For example, in the first round, we find the median 
+		 $M$ of $E$, and break $E$ into
+		\[
+				E_1=\{e \mid c\left( e \right) < M, e\in E\} , E_2 = \{e  \mid c \left( e \right) \ge M, e\in E\} 
+		.\] 
+		And in the second round, we can obtain 4 blocks by apply MOM to $E_1,E_2$. Finally we have $2^{k}$ blocks $A_1,\ldots,A_{2^{k}}$, while
+		each block has $\frac{m}{k 2^{k}}$ elements. Plus by the property of median
+		\[
+				\forall i<j, \forall e_1 \in A_i, e_2\in A_j, c\left( e_1 \right) < c\left( e_2 \right) 
+		.\] 
+		Hence we can apply the idea we used in \textbf{Exercise 2}. That is, 
 
-		To sum up, if we use \textbf{RAM model of computing}, we can  
-		exactly
-		reach $O\left( m\log\log\log m \right) $ running time, but if 
-		$c\left( e \right) ,\forall e$ could be arbitrarily large, for example 
-		$\Theta\left( n^2 \right) $, we can not improve the result.
+	\begin{algorithm}[H]
+		\caption{The key idea to solve MCP in time $n\log\ldots\log n$ }
+		\begin{algorithmic}
+				\State $E' = \bigcup_{i\le 2^{k}} A_{i}, L = 0, U = \max\left( E \right) $
+				\For{$i$ in range$(2^{k})$}
+				\If{ $\left( V,A_i \right) $ is $s$- $t$ connected}
+				\State $E' \leftarrow A_i$, $L = \min \left( A_i \right) $ 
+				\Else 
+				\State $U = \min \left( A_i \right) $
+				\EndIf
+				\EndFor	
+		\end{algorithmic}
+\end{algorithm}
+Hence our problem is reduced to a edge set $E'$ with whose size is $O\left( \frac{m}{k 2^{k}} \right) $, we
+call this one  iteration. And this 
+costs 
+ \[
+		 T = \sum_{i=1}^{k} \sum_{j=1}^{i} O\left( \frac{m}{k 2^{i}} \right) = k O\left( \frac{m}{k} \right) = O\left( m \right) 
+.\] 
+And let $f\left( k \right)  = k 2^{k}$, assume that after $r$ iterations, we can decide $c^{*}$, we have 
+\[
+		f^{r-1}\left( 1 \right) <  m
+.\] 
+Which leads that $m \ge g^{r-1}\left( 1 \right)  $, in which $g\left( x \right) = 2^{x}$. Hence $r$ is the 
+smallest integer such that 
+$1 \le  \log \log\ldots\log m$ with $r$ log, the overall running time is 
+$O\left( r m  \right)  $. Actually we can prove $\forall s$, $\exists m$
+\[
+		r < \log\log\ldots\log m \left( \text{with } s \log \right) 
+.\] 
+Otherwise $1 < \log\ldots\log r $ with $r-s$ log. Hence  $r >f^{r-s} \left( 1 \right) $, which
+leads to a contradiction since $m$ and  $r$ can be arbitrarily large but $s$ is fixed.
+Hence the running time could be written as $O\left( m \log \log \ldots\log m \right) $ (arbitrary number of log). 
 \end{proof}
 
 \end{document}
