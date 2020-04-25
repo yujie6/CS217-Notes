@@ -41,29 +41,27 @@ Now, let's think about the complexity. For every node, it may be in queue at lea
 \caption{Solve MCP in time $\Theta(n+m)$ with all the edges sorted by their cost}
 \begin{algorithmic}
 \Procedure{MCP}{$G, s, t$}
-	\State $visited[s] = \rm{True}$
-	\State $G' =\rm{NULL} $
+	\State Initiate $visited \gets s$ and $G' \leftarrow \emptyset$
 	\For {$e \in G$}
-		\If{$visited[e.from] \&\& !visited[e.to]$}
+		\If{$e.from\in visited$ and $e.to\notin visited$}
 			\State $bfs\_graph(e.to, G')$
 		\Else
-			\State $G'.add\_edge(e)$
+			\State $G'\gets G' \cup {e}$
 		\EndIf
-		\If{$visited[t]$}
+		\If{$t \in visited$}
 			\State \Return $e.weight$
 		\EndIf
 	\EndFor
 \EndProcedure
 \Procedure{bfs\_graph}{$s, G$}
-	\State $visited[s] = \rm{True}$
-	\State $queue.push(s)$
-	\While {!queue.empty()}
-		\State $top = queue.top()$
-		\State $queue.pop()$
-		\For{$e \in G[top]$}
-			\If {$!visited[e.to]$}
-				\State $visited[e.to] = \rm{True}$
-				\State $q.push(e.to)$
+	\State $visited \gets visited \cup {s}$
+	\State push s into the queue
+	\While {queue is not empty}
+		\State Let top be the head of the queue and pop the head.
+		\For{$e \in {edges\ in\ G\ from\ top}$}
+			\If {$e.to \notin visited$}
+				\State $visited \gets visitied \cup{e.to}$
+				\State push e.to into the queue
 			\EndIf
 		\EndFor
 	\EndWhile
