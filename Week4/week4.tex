@@ -159,7 +159,8 @@ Hence
 		\[
 				E_1=\{e \mid c\left( e \right) < M, e\in E\} , E_2 = \{e  \mid c \left( e \right) \ge M, e\in E\} 
 		.\] 
-		And in the second round, we can obtain 4 blocks by apply MOM to $E_1,E_2$. Finally we have $2^{k}$ blocks $A_1,\ldots,A_{2^{k}}$, while
+		And in the second round, we can obtain 4 blocks by apply MOM to $E_1,E_2$ respectively. Finally we have $2^{k}$ blocks $A_1,\ldots,A_{2^{k}}$ by using the above method
+		recursively, while
 		each block has $\frac{m}{k 2^{k}}$ elements. Plus by the property of median
 		\[
 				\forall i<j, \forall e_1 \in A_i, e_2\in A_j, c\left( e_1 \right) < c\left( e_2 \right) 
@@ -185,13 +186,14 @@ costs
  \[
 		 T = \sum_{i=1}^{k} \sum_{j=1}^{i} O\left( \frac{m}{k 2^{i}} \right) = k O\left( \frac{m}{k} \right) = O\left( m \right) 
 .\] 
-And let $f\left( k \right)  = k 2^{k}$, assume that after $r$ iterations, we can decide $c^{*}$, we have 
+And let $f\left( k \right)  = k 2^{k}$, assume that after $r$ iterations, we can decide $c^{*}$ i.e. there is only one integer in the interval $E'$, we have 
 \[
-		f^{r-1}\left( 1 \right) <  m
+		f^{r-1}\left( 1 \right) <  m \le  f^{r} \left( 1 \right) 
 .\] 
 Which leads that $m \ge g^{r-1}\left( 1 \right)  $, in which $g\left( x \right) = 2^{x}$. Hence $r$ is the 
 smallest integer such that 
-$1 \le  \log \log\ldots\log m$ with $r$ log, the overall running time is 
+$1 \le  \log \log\ldots\log m$ with $r$ log, that means we only need 
+$r$ iterations to reduce the problem,  hence the overall running time is 
 $O\left( r m  \right)  $. Actually we can prove $\forall s$, $\exists m$
 \[
 		r < \log\log\ldots\log m \left( \text{with } s \log \right) 
