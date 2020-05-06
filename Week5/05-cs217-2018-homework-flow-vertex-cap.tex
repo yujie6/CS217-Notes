@@ -71,8 +71,8 @@ if they don't share any vertices except $s$ and $t$.
    \begin{enumerate}
    \item There are $k$ vertex disjoint paths $p_1,\dots,p_k$ from $s$ to $t$; that is, no two $p_i$, $p_j$ share
    any vertex besides $s$ and $t$.
-   \item There are vertices $v_1,\dots,v_k \in V \setminus \{s,t\}$ such that
-   $G - \{v_1,\dots, v_k\}$ contains no $s$--$t$-path.
+   \item There are vertices $v_1,\dots,v_{k-1} \in V \setminus \{s,t\}$ such that
+   $G - \{v_1,\dots, v_{k-1}\}$ contains no $s$--$t$-path.
    \end{enumerate}
 \end{theorem}
 
@@ -143,56 +143,6 @@ i.e., those vertices $u$ having exactly $i$ coordinates which are $1$.
 \label{exercise-matchings-in-H}
 \end{exercise}
 \begin{proof}
-		Consider $v\in L_{i},$ we know there are $i$ bits to be  $1$. 
-		Let $a_1,a_2,\ldots, a_i$ be that set of integers or indexes
-		such that $\forall j \le i , v_{a_j}= 1$. That is, we use the indexes
-		in which $v$ has value  $1$ to represent the vertex.
-
-		Our goal is to construct a mapping $g: \{\N\times \ldots\times \N \}\to \N$, such
-		that $\{ v_1,\ldots,v_{i}, g\left( v \right) \}= \left\{ \mathbf{v},g\left( v \right)  \right\} \in L_{i+1}$ , plus 
-		$\forall u\neq v \in L_{i}$, we have 
-		\[
-				\{ u, g\left( u \right) \} \neq 
-				\{ v, g\left( v \right) \} 
-		.\] 	
-		Let $n = \prod_{i=1}^{n} p_i ^{\alpha _i} $, consider the smallest prime 
-		$p \not\in \{p_1,\ldots,p_n\} $, we construct the mapping $g$ 
-		as following:
-		\[
-				g\left( u \right) = \left( p-1 \right) \left( 
-				\sum_{j=1}^{i} u_{j}\right) \bmod n
-		.\] 
-		We assume $u$ maps to  $n$ if $g\left( u \right) = 0$. Now we prove
-		this mapping is valid. Otherwise, there exists $u,v$ they have at least 1
-		different elements, i.e. 
-		\[ 
-				i - \left|u \cap v\right| \ge 1. 
-		\]
-		Plus 
-		$\{u,g\left( u \right) \} = \{v, g\left( v \right) \} $. We must have 
-		\[
-		\left| u\cap v \right| = i- 2
-		.\] 
-		Assume $u=\{ a_1,\ldots,a_{i-1}, g\left( v \right) \},v =\{ a_1,\ldots
-		a_{i-1}, g\left( u \right) \} $. 
-		Hence 
-		\begin{align*}
-				g\left( u \right)  =&\left( p-1 \right)  \left( \sum_{j=1}^{i-1} a_{i} + g\left( v \right) \right) \bmod n \\
-				g\left( v \right)  =&  \left( p-1 \right) \left( \sum_{j=1}^{i-1} a_i + g\left( u \right)  \right)  \bmod n
-		.\end{align*}
-		Which leads that 
-		\[
-				p\left( g\left( u \right) -g\left( v \right)  \right) = 0 \pmod n 
-		.\] 
-		Hence 
-		\[
-				u = \{a_1, \ldots, a_{i-1}, g\left( v \right) \} =
-				\{ a_1,\ldots,a_{i-1}, g\left( u \right) \} =
-				v
-		.\] 
-		It contradicts with the assumption that $u\neq v$, thus the mapping 
-		$g$ is a valid one. And $H_n\left[ L_i \cap L_{i+1} \right] $ has a 
-		matching!
 \end{proof}
 \begin{exercise} 
   Let $H_n$ be the $n$-dimensional Hamming cube. For $i < n/2$ consider
@@ -213,13 +163,6 @@ i.e., those vertices $u$ having exactly $i$ coordinates which are $1$.
 
 \end{exercise}
 \begin{proof}
-		It is well known that $\binom{i}{n} \le\binom{i+1}{n} \le \ldots \le \binom{\frac{n}{2}}{n} $. We construct a graph with $s,t,L_i,\ldots,L_{n-i}$. While $s$ connects
-		every vertex in  $L_{i}$, $t$ connects every vertex in  $L_{n-i}$. 
-
-		And each edge connects $L_{k},L_{k+1}, i\le k\le n-i$ has capacity $1$. 
-		It's clear that the maxflow is less than  $\left| L_{i} \right| $. 
-
-        Plus if maxflow equals $\left| L_{i} \right| $ we are done. 
 \end{proof}
 
 \subsection{Matchings and Vertex Covers}
