@@ -2,9 +2,9 @@
 
 
 
-\newcommand{\handoutdate}{Monday, 2019-10-21}
-\newcommand{\firstduedate}{Monday, 2019-10-28}
-\newcommand{\finalduedate}{Monday, 2019-11-04}
+\newcommand{\handoutdate}{Friday, 2020-05-01}
+\newcommand{\firstduedate}{Friday, 2020-05-08}
+\newcommand{\finalduedate}{Tuesday, 2020-05-19}
 
 \input{preamble}
 
@@ -51,7 +51,8 @@ if they don't share any vertices except $s$ and $t$.
    second, one of them must occur (this requires a tool from the lecture).
 \end{exercise}
 \begin{proof}
-    First we prove the easy part, these two cases will not occur simultaneously.Prove it by contradiction.
+
+	First we prove the easy part, these two cases will not occur simultaneously.Prove it by contradiction.
 
     Suppose both cases are true simultaneously, then there are $k$ vertex disjoint paths $p_1, ..., p_k$ from $s$ to $t$.
     and there exists $v_1, ..., v_{k - 1}$ such that $G - \{ v_1, ...,v_{k - 1}\}$ contains no 
@@ -64,43 +65,11 @@ if they don't share any vertices except $s$ and $t$.
 
     Next we prove that one of them must occur.
 
-    The second case is obvious since we can just remove all vertices except $s, t$ from the $V$, then obviously there're no
-    s-t-path now.
-
-    For the first case, we construct such a network-graph with all edge in the original graph assigned capacity 1.
-    \begin{figure}[h]
-        \centering
-        \includegraphics[scale=0.3]{figures/123.png}
-        \caption{network}
-    \end{figure}
-    In such a network, the value of a flow is the number of vertex disjoint paths in such a flow. 
-    Since the capacity of each edge is $1$, we can know for sure that no two s-t-path cross with each other,
-    otherwise there must be a vertex with units bigger than 1. Based on that, we see $k$, the value of a flow 
-    is the number of paths in it. Thus leading to $k$ disjoint paths.
-
-    In fact, we can prove that the maximum number of disjoint paths  is equal to the minimum number of vertex set which
-    separates $s, t$.
-
-    We construct a new network from original graph. For a vertex $v$ other than $s, t$, we split it to $v^+, v^-$, and draw a 
-    new directed edge $v^-v^+$. For an edge $(s, v)$, replace it with $sv^-$. For an edge $(v, t)$, 
-    replace it with $v^+t$. For other edges $(u, v)$, replace it with $(u^+v^-, v^+u^-)$. All new edges are assigned capacity 1.
-    Here's an example.
-
-    \begin{figure}[h]
-        \centering
-        \includegraphics[scale=0.3]{figures/12.png}
-        \caption{network}
-    \end{figure}
-
-    In such a network $G'$, we split the nodes and put directed edge to make sure no two flow cross each other at some nodes.
-    Also, any flow $f$ in this network can produce a set $P$ of disjoint $(s, t)$ paths, $|P| = val(f)$. 
-    We add an edge $(u, v)$ to a path if $(u^+, v^-)$ is in the flow.
-    Any cut $C$ has a sub set $C'$ with all arcs like $(v^-,v^+)$, and $C'$ still a cut in $G'$. Then we can produce 
-    a set of vertices $V$ in $G$ with all nodes $v$($(v^-, v^+) \in C'$).
-
-    Then we know that for a maximum set $P'$of disjoint paths in $G$, $|P'| \ge |P| = val(f) = |C| \ge |C'| \ge |V| \ge |P'|$
-    So all of these values are equal, which finishes the proof.
-
+   For each vertex b, other than $s$ or $t$, replace b by the 2-vertex graph $H(b)$ with vertex set $\{b^+, b^−\}$ and arc $b^−b^+$ with cap $1$. Replace $s$ by $s^+$ and $t$ by $t^−$. Replace each edge $e=ab$, $\{a,b\}$  by the arcs $a^+b^−$ with cap $\inf$.
+   
+	If the maxinum flow of the new graph $G'$ is less than $k$. According to MaxFlow-MinCut Theroem and the min-cut must choose the edge $b^-b^+$, we can choose one of the min-cut that makes the graph has no s-t path and the number of points is less than $k$. That satisfies the situation 1.
+	
+	Otherwise, the maxinum flow is at least $k$, that means there are at least $k$ augmenting path in new graph $G'$. And we can correspond one augmenting path in new graph to one vertex disjoint paths in origin graph. That satisfies the situation 2.
 \end{proof}
 
 
@@ -134,6 +103,13 @@ i.e., those vertices $u$ having exactly $i$ coordinates which are $1$.
 \label{exercise-matchings-in-H}
 \end{exercise}
 \begin{proof}
+	On the left, sets of size $i$. On the right, sets of size $i + 1$, and an edge if the left vertex
+is included in the right vertex. Note that every vertex on the left has $n-i$ neighbors, and every
+vertex on the right has $i + 1$ neighbors.
+
+	Let $S$ be any family of $L_i$. The number of edges coming out of S is $|S|(n-i)$, therefore,
+the number of neighbors of S is at least $|S|(n-i)/(i+1) \ge |S|$. Hall’s theorem then completes
+the proof.
 \end{proof}
 \begin{exercise} 
   Let $H_n$ be the $n$-dimensional Hamming cube. For $i < n/2$ consider
