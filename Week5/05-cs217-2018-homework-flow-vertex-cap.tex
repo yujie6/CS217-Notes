@@ -154,6 +154,33 @@ i.e., those vertices $u$ having exactly $i$ coordinates which are $1$.
 
 \end{exercise}
 \begin{proof}
+
+  We can build a new network like this, create a source vertex $s$ and a terminal vertex $t$.
+  Connect $s$ with all nodes in $L_i$ and $v$ with all nodes in $L_{n - i}$, leave all edges between
+  $L_i, L_{i + 1}$ as they were. Assign all edges with capacity 1. 
+  
+  The maximum flow in this network is no larger than $|L_i| = \tbinom{n}{i}$, since the number of edges connecting 
+  to $s$ is $|L_i|$ and they all have capacity 1. Then we give a flow with value $|L_i|$, this should 
+  tell us the maximum flow is $\tbinom{n}{i}$
+
+  Here is an example.
+
+  \begin{figure}[h]
+    \centering
+    \includegraphics[scale=0.3]{figures/2.png}
+    \caption{network}
+  \end{figure}
+
+  For all edges between $L_j, L_{j + 1}$, we assign it with flow 
+  $\frac{C_{n}{i}}{C_{n}{j + 1} (n - j)}$ as the edges between $L_j,L_{j + 1}$ is 
+  $C_{n}{j + 1}(n - j)$. Notice that $L_{j + 1}$ has $C_{n}{j + 1}$ nodes and each 
+  node in $L_{j + 1}$ is connected with $(n - j)$ nodes in $L_j$.
+  Since the graph is symmetrical, such flow can be built.
+
+  Based on the proof of Menger's THM, we know that the maximum number of disjoint paths 
+  equals the maximum flow in this network. So there're $\tbinom{n}{i}$
+  disjoint paths from $L_i$ to $L_{n - i}$.
+
 \end{proof}
 
 \subsection{Matchings and Vertex Covers}
