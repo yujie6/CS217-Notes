@@ -1,0 +1,7 @@
+Menger's theorems.
+
+Undirected, Vertex Version. Let G be an undirected graph, and let u and v be nonadjacent vertices in G. Then, the maximum number of pairwise-internally-disjoint (u,v)-paths in G equals the minimum number of vertices from V(G)-{u,v} whose deletion separates u and v.
+
+For each vertex b, other than u or v, replace b by the 2-vertex graph H(b) with vertex set {b+,b−} and arc b−b+. Replace u by u+ and v by v−. Replace each edge e=ab, {a,b} disjoint from {u,v}, by the arcs a+b− and b+a−. Replace each edge e=ub by the arc u+b−. Replace each edge e=av by the arc a+v−.
+
+Any {0,1}-flow f in the new graph, D', yields a set P of pairwise-internally-disjoint directed (u,v)-paths in G, with |P|=w(f). Any cut C, a set of arcs whose deletion destroys all (u+,v−)-paths in D' yields a set C' of arcs in D' of type b−b+, with |C'|≤|C|, and no (u+,v−)-paths in D'. This, in turn, yields a set of vertices C" in G, with |C"|≤|C'|, and no (u,v)-paths in D−C". But, then, for a maximum cardinality set P' of pairwise-internally-disjoint (u,v)-paths in G satisfies |P'|≥|P|=w(f)=|C|≥|C'|≥|C"|≥|P'|.
