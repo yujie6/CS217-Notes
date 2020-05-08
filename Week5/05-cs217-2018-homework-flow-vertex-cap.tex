@@ -189,22 +189,46 @@ three minimum vertex covers. The five-cycle $C_5$ has $\nu(C_5) = 2$ but has fiv
    at most $f(k)$ minimum vertex covers? How small a function $f$ can you obtain?
 \end{exercise}
 \begin{proof}
-	Since this is for every graph. First consider $K_{2r+1}$, we have $\frac{k}{r}$ $K_{2r+1}$.
-	Hence $\nu\left( G \right) = \frac{k}{r} \cdot r = k$
-	\[
-			f\left( k \right)  \ge  \left( 2r+1 \right) ^{\frac{k}{r}}
-	.\] 
-	For example, if we choose $r=1$, there are $k$  $K_3$, we have  $f\left( k \right) \ge  3^{k}$. And  let $r\to \infty$  we have 
-	\[
-			f\left( k \right) \ge  e^{2k}
-	.\] 
-	Next we prove that the number of minimum vertex cover is at most $e^{2k}$. 
-	Consider $\forall $ minimum vertex cover $K$. We prove 
-	 \[
-	\left| K \right| \le e^{2k}
-	.\] 
-	Let $\forall u,v \in K$. If $u,v$ are connected, then at least one of them 
-	is on a edge of maximum matching.
+	Assume that there are $m $ connected componets $G_1,\ldots,G_{m}$, and each have $c_{i} $ 
+	vertexes, hence the number of minimum vertex 
+cover is
+\[
+		S  = \prod_{i=1}^{m} c_{i} \le  f\left( k \right)  
+.\] 
+And suppose that connected component $G_{i}$ has maximum matching $k_{i}$.
+We have $k_{i} \le  \frac{c_{i}}{2}$, therefore
+\[
+k = \sum_{i=1}^{m} k_i \le \frac{1}{2} \sum_{i=1}^{m} c_i
+.\] 
+Plus
+\[
+k = \sum_{i=1}^{m} k_i \ge m
+.\] 
+Hence we need to find the smallest function $f$ such that
+ \[
+		 \prod_{i=1}^{m} c_{i} \le   f\left( k \right) 
+		 \le f\left( \frac{1}{2} \sum_{i=1}^{m} c_i \right) 
+.\] 
+Notice that 
+\[
+		\sum_{i=1}^{m} c_i \ge m \left( \prod_{i=1}^{m} c_i  \right) ^{\frac{1}{m}} 
+.\] 
+Let $t = \prod_{i=1}^{m} c_{i} $, we must have 
+\[
+		t\le f\left( m t ^{\frac{1}{m}} \right) 
+.\] 
+Which is equivalent to find the largest $g = f^{-1}$ such that
+\[
+	  \forall m, mt ^{\frac{1}{m} } -	g\left( t \right)  \ge 0
+.\] 
+Thus $g$ cannot be polynomial, the maximum of $g$ could only be something like 
+$c \ln\left( x \right) $. i.e.
+\[
+		h\left( t \right) = m t ^{\frac{1}{m}} - c\ln\left( t \right) , \forall t\ge 1,m\ge 1
+.\] 
+It easy to find the largest $c$ is  $1$. Hence the smallest $f$ is
+$f\left( k \right) = e^{k}$
+
 \end{proof}
 
 
