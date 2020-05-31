@@ -1,0 +1,171 @@
+\documentclass[12pt,a4]{article}
+
+
+
+
+\newcommand{\handoutdate}{Thursday, 2019-10-30}
+\newcommand{\firstduedate}{Monday, 2020-6-1}
+\newcommand{\finalduedate}{Thursday, 2020-11-14}
+
+
+\input{preamble}
+
+
+
+
+\newcommand{\rank}{\textnormal{rank}}
+\newcommand{\y}{\mathbf{y}}
+\renewcommand{\c}{\mathbf{c}}
+\newcommand{\x}{\mathbf{x}}
+\newcommand{\z}{\mathbf{z}}
+\renewcommand{\u}{\mathbf{u}}
+\newcommand{\V}{\mathbf{v}}
+\newcommand{\val}{\textnormal{val}}
+
+\renewcommand{\a}{\mathbf{a}}
+
+\renewcommand{\b}{\mathbf{b}} 
+\newcommand{\zero}{\mathbf{0}}
+\newcommand{\rpn}{\mathbb{R}_{\geq 0}}
+\newcommand{\sol}{\textup{\textrm{sol}}}
+\newcommand{\opt}{\textup{\textrm{opt}}}
+\setcounter{section}{5}
+
+
+\section{Matching LP and Vertex Cover LP}
+
+
+Let $G=(V,E)$ be a 
+graph and consider the Vertex Cover Linear Program $\textrm{VCLP}(G)$:
+\begin{align*}
+  \textrm{VCLP($G$)}: \qquad
+  \begin{array}{lrl}
+    \textnormal{minimize} \quad & \multicolumn{2}{l}{\sum_{u \in V} y_u} \\
+    \textnormal{subject to} \quad & y_u + y_v  & \geq 1 \quad \forall\ \textnormal{ edges } \{u,v\} \in E\\
+     & \y & \geq \mathbf{0}  
+  \end{array}
+\end{align*}
+Every vertex cover of $G$ corresponds to a feasible solution $\y \in \sol(\textrm{VCLP}(G))$, but not 
+vice versa. However, every $\y \in \sol(\textrm{VCLP}(G)) \cap \{0,1\}^V$ does.
+Let $\tau(G)$ denote the size of a minimum vertex cover of $G$. In class, we showed that
+$\tau(G) = \val(\textrm{VCLP}(G))$ for all {\em bipartite} graphs $G$. We achieved this by taking
+an arbitrary feasible solution $\y$ and ``shaking'' it until it becomes integral, while making sure
+its value does not go up.\\
+
+
+Next, recall the Matching Linear Program $\textrm{MLP}(G)$:
+\begin{align*}
+  \textrm{MLP($G$)}: \qquad
+  \begin{array}{lrl}
+    \textnormal{maximize} \quad & \multicolumn{2}{l}{\sum_{e \in E} x_e} \\
+    \textnormal{subject to} \quad & \sum_{e \in E: u \in e} x_e  & \leq 1 \quad \forall\ u \in V \\
+     & \x & \geq \mathbf{0}  
+  \end{array}
+\end{align*}
+Every matching of $G$ corresponds to a feasible solution $\x \in \sol(\textrm{MLP}(G))$, but not 
+vice versa. However, every $\x \in \sol(\textrm{MLP}(G)) \cap \{0,1\}^E$ does.
+
+\begin{exercise}
+   Let $\nu(G)$ denote the size of a maximum matching of $G$. 
+   Obviously, $ \val(\textrm{MLP}(G)) \geq \nu(G)$ for all graphs.
+   Show that
+   $\nu(G) = \val(\textrm{MLP}(G))$ for all {\em bipartite} graphs $G$.
+\end{exercise}
+\begin{proof}
+		
+\end{proof}
+\begin{exercise}
+  We know that $\nu(G) = \tau(G)$ for all bipartite graphs (K\H{o}nig's Theorem) and
+  $\nu(G) \leq \tau(G)$ for all graphs (since every matched edge must be covered
+  by a distinct vertex). Show that $\tau(G) \leq 2 \, \nu(G)$ for all graphs $G$.   
+\end{exercise}
+\begin{proof}
+		Assume that $\alpha$ be the size of maximum independent set, and $\beta$ be the size of a minimum vertex cover of G. Let $U$ be the set of vertex cover, and $V/U$ must be an independent set, because if there is any edge between $S/U$, $U$ is not a cover, contradiction. So we have $\alpha + \beta=|V|(1)$. 
+
+		Suppose $(a_1,b_1),(a_2,b_2),\cdots,(a_{\nu(G)},b_{\nu(G)})$ be a maximum match. Let $W$ be the vertex set that is not in the maximum match. Obviously, $W$ is an independent set. By definition, $2\nu(G)+|W|= |V|$. Because W is an independent set, $|W|\le \alpha=|V|-\tau(G)$. So we get $\tau(G)\le 2\nu(G)$.
+\end{proof}
+\begin{exercise}
+   Show that $\tau(G) \leq 2\, \opt(\textrm{VCLP}(G))$ for all graphs $G$ (including non-bipartite graphs).
+\end{exercise}
+\begin{proof}
+	By the result of last exercise
+	\[
+			\tau\left( G \right) \le 2 \nu\left( G \right) 
+	.\] 
+	And $\nu\left( G \right) \le \opt\left( VCLP\left( G \right)  \right) $, the result is obvious.
+\end{proof}
+
+\textbf{Basic Solutions.} Recall our definition of basic solutions.
+Let $P$ be the following linear program.
+\begin{align*}
+  P: \qquad
+  \begin{array}{lrl}
+    \textnormal{maximize} \quad & \multicolumn{2}{l}{\mathbf{c}^T \x} \\
+    \textnormal{subject to} \quad & A\x & \leq \b \ 
+  \end{array}
+\end{align*}
+where we translated the constraint $\x \geq 0$ into $n$ constraints
+$-x_i \leq 0$ and integrated them into $A$, so 
+the $n$ last rows of $A$ form the 
+negative identity matrix $-I_n$. We introduce some notation: $\a_i$ is the $\nth{i}$ row of $i$;
+for $I \subseteq [m+n]$ let $A_I$ be the matrix
+consisting of the rows $\a_i$ for $i \in I$.
+\begin{definition}
+  For $\x \in \R^n$ let $I(\x) := \{i \in [m+n] \ | \ \a_i \x = b_i\}$
+  be the set of indices of the constraints that are ``tight'', i.e.,
+  satisfied with equality (we include non-negativity constraints here).  We call $\x \in \R^n$ a {\em basic point}
+  if $\rank(A_{I(x)}) = n$.  If $\x$ is a basic point and feasible, we
+  call it a {\em basic feasible solution} or simply a {\em basic
+    solution}.
+\end{definition}
+We can define the same concept for minimization programs. \\
+
+We say a set $C \subseteq V$ is a minimal vertex cover of $G = (V,E)$ if 
+(1) it is a vertex cover and (2) it is minimal, i.e., for every $u \in C$ the set
+$C \setminus \{u\}$ is not a vertex cover anymore.
+
+\begin{exercise}
+
+\end{exercise}
+\begin{proof}
+		(1) 
+		Consider such a graph: $\left| V \right| =4,	E = E(K_4) / e_{1,2}$, obviously it's not bipartite.
+		We have
+		\[
+				\nu\left( G \right) = 2 = \nu_{f}\left( G \right) = \tau_{f}\left( G \right) =\tau\left( G \right) 
+		.\] 
+		(2) Let $G = K_4$, then 
+		\[
+				\nu\left( G \right) =2 = \nu_{f}\left( G \right) =\tau_{f}\left( G \right) < \tau\left( G \right) = 3
+		.\] 
+		(3) Since $G$ is VCLP exact. A MVC $Y$ also corresponds to a optimal solution in VCLP. If 
+		$e=\left( u_0,v_0 \right) \in Y$. We have 
+		\[
+				y_{u_0} = y_{v_0} = 1 \implies y_{u_0} + y_{v_0} = 2 > 1
+		.\] 
+		Hence we wouldn't use this inequality $y_{u_0} + y_{v_0} \ge 1$ when converting the VCLP to its dual,
+		therefore the respective coefficient $x_{e} = 0$. More specifically:
+		\[
+				\sum _{u \in V} y_{u}\ge  \sum_{e\in E} x_e \left( y_u + y_v \right) \ge \sum _{e\in E} x_e
+		.\] 
+		As $\min \sum_{u\in V} y_u= \max \sum_{e\in E} x_e$. 
+		These inequalities are all tight, which leads that 
+		\[
+				x_e = 0 \text{ or } y_{u} + y_{v} = 1
+		.\] 
+		If $y_u + y_v > 1, x_e \neq 0$, the inequality is not tight, leads to a contradiction.
+		\\(4) Since there is a matching of size $\left| Y \right| $.
+		\[
+		\max \sum_{e\in E} x_e \ge  \left| Y \right| 
+		.\] 
+		While 
+		\[
+				\max \sum_{e\in E} x_e \le \tau_{f}\left( G \right)  = \left| Y \right| 
+		.\] 
+		It follows that 
+		\[
+				\nu\left( G \right) = \nu_{f}\left( G \right) 
+		.\] 
+		Hence $G$ is MLP-exact too.
+\end{proof}
+\end{document}
