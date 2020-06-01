@@ -152,7 +152,18 @@ $C \setminus \{u\}$ is not a vertex cover anymore.
 				x_e = 0 \text{ or } y_{u} + y_{v} = 1
 		.\] 
 		If $y_u + y_v > 1, x_e \neq 0$, the inequality is not tight, leads to a contradiction.
-		\\(4) Since there is a matching of size $\left| Y \right| $.
+		\\(4)First we prove there is a matching of size $s=\left| Y \right| $.
+		Consider all the vertexes $v_1,v_2,\ldots,v_s\in Y$. If $\exists i\neq j$ s.t.
+		$e=(v_i,v_j)\in E$, then $x_e = 0$. We can assert that  $\exists u_i\neq u_j$ s.t.
+		\[
+				\left( v_i,u_i \right) ,\left( v_j,u_j \right) \in E
+		.\]
+		Plus $u_i\neq v_j, u_j\neq v_i$, otherwise we can obtain a smaller vertex cover
+		by removing one of $v_i,v_j$. And otherwise  $v_i$ has no neighbors in  $Y$, 
+		we just choose an arbitrary neighbor(since it's MVC, it must have a neighbor), 
+		this neighbor cannot be one of  $u_i$ 
+		mentioned above, otherwise there is smaller vertex cover by removing this  $v_i$.
+		Hence we get a matching  of size $\left| Y \right| $
 		\[
 		\max \sum_{e\in E} x_e \ge  \left| Y \right| 
 		.\] 
