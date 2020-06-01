@@ -1,0 +1,56 @@
+\documentclass[UTF8]{ctexart} 
+\usepackage{amsmath} 
+\usepackage{graphicx}
+\usepackage{pythonhighlight}
+\usepackage{indentfirst}
+\usepackage{amsfonts}
+\usepackage{graphicx}
+\usepackage{subfig}
+
+% \usepackage{algorithm}
+\usepackage[]{algorithm2e}
+\begin{document} 
+
+\title{Homework 5}
+\author{Ji Jiabao}
+\maketitle
+
+\subsection*{Exer.1}
+    We just need to prove that $int-val(MLP(G)) = val(MLP(G))$, since $val(MLP(G)) \ge \nu(G)$,
+    we do this following the proof for $VCLP(G)$ in class, the idea is to get int value solution
+    through modifying a non-int value solution a bit.
+
+    Suppose we already have a solution $\mathbf{x}$, 
+    and denote $\sum_{e \in E, u \in e}x_e = y_u, \forall u \in V$, we want to change $\mathbf{x}$ to int value,
+    and meanwhile $\mathbf{y}$ becomes int value.
+
+    At each step, those edges with $x_e= 0$ could just be ignored, while those edges with $x_e = 1$ and its both ends
+    could be ignored. In the following situations, we just don't take these edges and vertices into account.
+    \begin{enumerate}
+        \item 
+            For two vertices $u, v$ with non integral $y_u, y_v$, suppose there exits a path $e_1, e_2, ... e_m$, where $m$ is
+            odd. Let $d = min(1 - y_u, 1-y_v, 1-x_{e_1}, x_{e_2}, ..., 1- x_{e_k})$. Next we modify edges as following.
+            For those $e_i, i odd$, let $e_i = e_i + d$, and for those $e_i, i even$, let $e_i = e_i - d$. By doing this,
+            all constraints remains, and at least one of $y_u, y_v, x_{e_1}, ... x_{e_k}$ becomes integral. In all, $val(MLP(G))$ increases by d. 
+        \item
+            Similar to the situation above, except that the path has an even size.
+            Let $d = min(1 - y_u, y_v, 1-x_{e_1}, x_{e_2}, ..., 1- x_{e_{k - 1}}, x_{e_k})$. Next we modify edges as the above situation.
+            By doing this, all constraints still remains, 
+            and at least one of $y_u, y_v, x_{e_1}, ... x_{e_k}$ becomes integral. In all, $val(MLP(G))$ remains unchanged.
+        \item 
+            If $y_u$ is non integral but $y_v$ integral, we just find all vertices connected with $u, v$. Denote the left side as $L$
+            and the right side as $R$, We shall have $\sum_{u \in L} y_u = \sum_{u \in R} y_u$. But the left side is non integral while 
+            the right side is integral, leading to a contradiction.
+        \item 
+            If all $y_u$ are integral, but some $x_e$ may still remain non integral. To solve this,
+            we find one of the non integral edge $e_1$, with $u$ as one of its end. Since $y_u$ integral, there exists another $e_2$
+            non integral connected to $u$. Continue this, we will find a cycle $e_1,...,e_k$ with even size since $G$ is bipartite.
+            Let $d = min(1-x_{e_1}, x_{e_2}, ... 1-x_{e_{k - 1}}, x_{e_k}$, do the updates as the above updates.
+            We can see that $\mathbf{y}$ remains, while at least one $x_e$ becomes integral, and $val(MLP(G))$ remains.
+    \end{enumerate}
+
+    In the above situations, at least one $y_u$ or one $x_e$ becomes integral. Since both $\mathbf{x}, \mathbf{y}$ are finite, 
+    this procedure will end. And since $x_e$ becomes all integral, the original solution becomes an int value solution while not making 
+    $\sum_{e \in E}x_e$ worse.
+\end{document}
+
