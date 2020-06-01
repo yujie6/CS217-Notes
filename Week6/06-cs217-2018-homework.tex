@@ -72,7 +72,42 @@ vice versa. However, every $\x \in \sol(\textrm{MLP}(G)) \cap \{0,1\}^E$ does.
    $\nu(G) = \val(\textrm{MLP}(G))$ for all {\em bipartite} graphs $G$.
 \end{exercise}
 \begin{proof}
-		
+	We just need to prove that $int-val(MLP(G)) = val(MLP(G))$, since $val(MLP(G)) \ge \nu(G)$,
+    we do this following the proof for $VCLP(G)$ in class, the idea is to get int value solution
+    through modifying a non-int value solution a bit.
+
+    Suppose we already have a solution $\mathbf{x}$, 
+    and denote $\sum_{e \in E, u \in e}x_e = y_u, \forall u \in V$, we want to change $\mathbf{x}$ to int value,
+    and meanwhile $\mathbf{y}$ becomes int value.
+
+    At each step, those edges with $x_e= 0$ could just be ignored, while those edges with $x_e = 1$ and its both ends
+    could be ignored. In the following situations, we just don't take these edges and vertices into account.
+    \begin{enumerate}
+        \item 
+            For two vertices $u, v$ with non integral $y_u, y_v$, suppose there exits a path $e_1, e_2, ... e_m$, where $m$ is
+            odd. Let $d = min(1 - y_u, 1-y_v, 1-x_{e_1}, x_{e_2}, ..., 1- x_{e_k})$. Next we modify edges as following.
+            For those $e_i, i odd$, let $e_i = e_i + d$, and for those $e_i, i even$, let $e_i = e_i - d$. By doing this,
+            all constraints remains, and at least one of $y_u, y_v, x_{e_1}, ... x_{e_k}$ becomes integral. In all, $val(MLP(G))$ increases by d. 
+        \item
+            Similar to the situation above, except that the path has an even size.
+            Let $d = min(1 - y_u, y_v, 1-x_{e_1}, x_{e_2}, ..., 1- x_{e_{k - 1}}, x_{e_k})$. Next we modify edges as the above situation.
+            By doing this, all constraints still remains, 
+            and at least one of $y_u, y_v, x_{e_1}, ... x_{e_k}$ becomes integral. In all, $val(MLP(G))$ remains unchanged.
+        \item 
+            If $y_u$ is non integral but $y_v$ integral, we just find all vertices connected with $u, v$. Denote the left side as $L$
+            and the right side as $R$, We shall have $\sum_{u \in L} y_u = \sum_{u \in R} y_u$. But the left side is non integral while 
+            the right side is integral, leading to a contradiction.
+        \item 
+            If all $y_u$ are integral, but some $x_e$ may still remain non integral. To solve this,
+            we find one of the non integral edge $e_1$, with $u$ as one of its end. Since $y_u$ integral, there exists another $e_2$
+            non integral connected to $u$. Continue this, we will find a cycle $e_1,...,e_k$ with even size since $G$ is bipartite.
+            Let $d = min(1-x_{e_1}, x_{e_2}, ... 1-x_{e_{k - 1}}, x_{e_k}$, do the updates as the above updates.
+            We can see that $\mathbf{y}$ remains, while at least one $x_e$ becomes integral, and $val(MLP(G))$ remains.
+    \end{enumerate}
+
+    In the above situations, at least one $y_u$ or one $x_e$ becomes integral. Since both $\mathbf{x}, \mathbf{y}$ are finite, 
+    this procedure will end. And since $x_e$ becomes all integral, the original solution becomes an int value solution while not making 
+    $\sum_{e \in E}x_e$ worse. Thus we know $\nu(G) = val(MLP(G))$
 \end{proof}
 \begin{exercise}
   We know that $\nu(G) = \tau(G)$ for all bipartite graphs (K\H{o}nig's Theorem) and
@@ -80,7 +115,9 @@ vice versa. However, every $\x \in \sol(\textrm{MLP}(G)) \cap \{0,1\}^E$ does.
   by a distinct vertex). Show that $\tau(G) \leq 2 \, \nu(G)$ for all graphs $G$.   
 \end{exercise}
 \begin{proof}
-		
+		Assume that $\alpha$ be the size of maximum independent set, and $\beta$ be the size of a minimum vertex cover of G. Let $U$ be the set of vertex cover, and $V/U$ must be an independent set, because if there is any edge between $S/U$, $U$ is not a cover, contradiction. So we have $\alpha + \beta=|V|(1)$. 
+
+		Suppose $(a_1,b_1),(a_2,b_2),\cdots,(a_{\nu(G)},b_{\nu(G)})$ be a maximum match. Let $W$ be the vertex set that is not in the maximum match. Obviously, $W$ is an independent set. By definition, $2\nu(G)+|W|= |V|$. Because W is an independent set, $|W|\le \alpha=|V|-\tau(G)$. So we get $\tau(G)\le 2\nu(G)$.
 \end{proof}
 \begin{exercise}
    Show that $\tau(G) \leq 2\, \opt(\textrm{VCLP}(G))$ for all graphs $G$ (including non-bipartite graphs).
@@ -93,37 +130,8 @@ vice versa. However, every $\x \in \sol(\textrm{MLP}(G)) \cap \{0,1\}^E$ does.
 	And $\nu\left( G \right) \le \opt\left( VCLP\left( G \right)  \right) $, the result is obvious.
 \end{proof}
 
-\textbf{Basic Solutions.} Recall our definition of basic solutions.
-Let $P$ be the following linear program.
-\begin{align*}
-  P: \qquad
-  \begin{array}{lrl}
-    \textnormal{maximize} \quad & \multicolumn{2}{l}{\mathbf{c}^T \x} \\
-    \textnormal{subject to} \quad & A\x & \leq \b \ 
-  \end{array}
-\end{align*}
-where we translated the constraint $\x \geq 0$ into $n$ constraints
-$-x_i \leq 0$ and integrated them into $A$, so 
-the $n$ last rows of $A$ form the 
-negative identity matrix $-I_n$. We introduce some notation: $\a_i$ is the $\nth{i}$ row of $i$;
-for $I \subseteq [m+n]$ let $A_I$ be the matrix
-consisting of the rows $\a_i$ for $i \in I$.
-\begin{definition}
-  For $\x \in \R^n$ let $I(\x) := \{i \in [m+n] \ | \ \a_i \x = b_i\}$
-  be the set of indices of the constraints that are ``tight'', i.e.,
-  satisfied with equality (we include non-negativity constraints here).  We call $\x \in \R^n$ a {\em basic point}
-  if $\rank(A_{I(x)}) = n$.  If $\x$ is a basic point and feasible, we
-  call it a {\em basic feasible solution} or simply a {\em basic
-    solution}.
-\end{definition}
-We can define the same concept for minimization programs. \\
-
-We say a set $C \subseteq V$ is a minimal vertex cover of $G = (V,E)$ if 
-(1) it is a vertex cover and (2) it is minimal, i.e., for every $u \in C$ the set
-$C \setminus \{u\}$ is not a vertex cover anymore.
-
 \begin{exercise}
-
+	
 \end{exercise}
 \begin{proof}
 		(1) 
