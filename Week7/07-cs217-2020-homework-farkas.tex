@@ -55,7 +55,56 @@ $\y = (y_1, \dots,y_m)$ be a row vector of $m$ variables.
   This exercise is actually not that hard. The hardest part is keeping track of what you 
   want to prove and what you can assume.
 \end{exercise}
+\begin{proof}
+		First we prove (1) and (2) are equivalent. First consider (1) $\implies$ (2). If $\neg \exists \x \ge  \zero : A\x \le \b$, 
+		notice that $\x \ge \zero $ iff $\left( -I_{n} \right) \x \le \zero$ , we can construct a new maxtrix $A'$ 
+		\[
+		A' = \begin{pmatrix} -I \\ A \end{pmatrix} , \b' = \begin{pmatrix} \zero\\ \b \end{pmatrix} 
+		.\] 
+		such that our assumption turns into
+		\[
+		\neg \exists \x : A' \x \le \b'
+		.\] 
+		And by (1), if follows that $\exists \y ' \ge \zero$ s.t. $(\y ')^{\top} A' = 0$ and  $(\y ') ^{\top} \b ' < 0$.
+		For convenience, we wirte $\y' = \left( z_1,z_2\ldots,z_n, \y \right) $ while $z_{i} \ge 0$, therefore
+		\[
+		-z_{i} + \y ^{\top} A_{i} = 0 \implies \y^{\top} A_{i} = z_{i} \ge  0
+		.\] 
+		Which leads that $\y^{\top} A \ge 0$.
+		Similarly $(\y')^{\top} \b'= \y ^{\top} \b  < 0 $, thus (2) is true. 
+		
+		Next we prove (2) $\implies$ (3). If $\neg \x \ge 0, A\x = \b$, which is $A \x \le \b$ plus $\left( -A \right) \x \le -\b$,
+		similarly we construct 
+		\[
+		A' = \begin{pmatrix} A \\ -A \end{pmatrix}, \b' = \begin{pmatrix} \b \\ -\b \end{pmatrix}  
+		.\] 
+		By (2), $\exists \y' = \left( \y_1, \y_2 \right) $ , such that 
+		\[
+		\y_1 A - \y_2 A \ge 0, \y_1\b - \y_2 \b < 0
+		.\] 
+		Choose $\y = \y_1 - \y_2$ we are done.
 
+		Now we prove (2) $\implies$ (1). 
+		
+		We know that $\neg \x \ge 0, A\left( \x \right) \le \b$.
+		And it's also obvious that $\neg \exists \x \ge 0, A \left( -\x \right) = \left( -A \right) \x\le \b$, 
+		we can build a new matrix $A' = \left( A, -A \right) $, hence 
+		\[
+				\neg \x' = \begin{pmatrix} \x_1\\ \x_2 \end{pmatrix}  \ge 0, \left( A, -A \right) \begin{pmatrix} \x_1 \\ \x_2 \end{pmatrix} \le 2\b
+		.\] 
+		By (2) we have 
+		\[
+				\exists \y, \y^{\top} A \ge 0, \y ^{\top} \left( -A \right) \ge 0, \y^{\top} \b < 0 \implies \y^{\top} A = 0
+		.\] 
+		Thus (2) $\implies$ (1) is true.
+
+		Finally we prove (3) $\implies$ (2), if $\neg \exists \x \ge 0: A\x \le \b$, similarly construct
+		\[
+				A' = \left( A, I \right) 
+		.\] 
+		We know $\neg \exists \x \ge 0, A' \x' = \b$.
+		The result follows directly from (3).
+\end{proof}
 
 \subsection{A Linear Program for, well, for what?}
 
