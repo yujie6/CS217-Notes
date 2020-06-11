@@ -1,0 +1,74 @@
+\documentclass[UTF8]{ctexart} 
+\usepackage{amsmath} 
+\usepackage{graphicx}
+\usepackage{pythonhighlight}
+\usepackage{indentfirst}
+\usepackage{amsfonts}
+\usepackage{graphicx}
+\usepackage{subfig}
+
+% \usepackage{algorithm}
+\usepackage[]{algorithm2e}
+\begin{document} 
+
+\title{Homework 5}
+\author{Ji Jiabao}
+\maketitle
+
+\subsection*{Exer.1}
+    \begin{enumerate}
+        \item 
+            $\Leftarrow:$ 
+            Suppose $\exists \mathbf{x} : A\mathbf{x}\le\mathbf{b}$,
+            Then $0 = 0 \cdot \mathbf{x}=(\mathbf{y}^TA)\mathbf{x} \le \mathbf{y}^T\mathbf{b} < 0$,
+            $0 < 0$, contradiction, so $\neg \exists \mathbf{x} : A\mathbf{x}\le\mathbf{b}$
+        \item 
+            $\Leftarrow:$
+            Similar to the proof in case (1), $0 \le 0 \cdot \mathbf{x} \le (\mathbf{y}^TA)\mathbf{x} \le \mathbf{y}^T\mathbf{b} < 0$
+            0 < 0, contradiction
+        \item 
+            $\Leftarrow:$
+            Similar to the proof above, $0 \le 0 \cdot \mathbf{x} \le (\mathbf{y}^TA)\mathbf{x} = \mathbf{y}^T\mathbf{b} < 0$,
+            0 < 0, contradiction
+    \end{enumerate}
+
+\subsection*{Exer.2}
+    To prove $opt(MCF) \le d$, we just need to prove that the shortest path is a solution to $MCF$.
+    We set $f(e) = 1$ along all edges in the shortest path, since there is only one path with flow $1$,
+    The constraints are obviously satisfied. So it is a solution of $MCF$, and its value is $1 * d = d$,
+    so $opt(MCF) \le d$
+
+    To prove $opt(MCF) \ge d$, we need to prove that all solutions of $MCF$ is not better than $d$.
+    We try to improve the value of all possible solutions to $d$.
+    
+    Suppose we have a solution with $x$ different $s-t$ path. Define $b(path)$ be the smallest flow in all
+    edges of $path$, $d(path)$ be the length of $path$. Let $sp$ be the shortest $s-t$ path. We do as follows, choose any path $p$ besides $sp$,
+    put $b(p)$ units of flow on $p$ to $sp$. Repeat it until there is only $1$ unit flowing through $sp$.
+
+    We need to show in each turn, $val(MCF)$ is not worse than previous and no constraints are broke. We fist prove 
+    $val(MCF)$ is not worse. In each turn, $val(MCF)' = val(MCF) + d * b(p) - d(p) * b(p)$, $d \le d(p)$, so $val(MCF)' \le val(MCF)$.
+    As for the constraints, inflow of $t$ remains to be 1 since we just move $b(p)$ units between two different paths.
+    Flow constraints remains since we modify the flow in one path, which means we move inflow and outflow of a single 
+    vertex at the same time. Since we only have $x$ different $s-t$ path, and the flow value on each path is finite,
+    the process terminates. So $val(MCF) \ge d$
+
+    In all $val(MCF) = d$
+
+\subsection*{Exer.3}
+    We introduce a dual coefficient $g_v, v \in V$. The dual program is:
+    \begin{itemize}
+        \item Maximize $g_t$, subject to:
+        \item $g_v - g_u \le c(u, v), \forall (u,v) \in E$
+        \item $g_v \in \mathbb{R}, v \in V$
+    \end{itemize}
+
+\subsection*{Exer.4}
+    If we set $g_s = 0$, then the $g_v$ can be thought as the cost of some $s-t$-path.
+    Since each edge $(u,v)$ must satisfy $g_v - g_u \le c(u,v))$, we can not just choose the
+    maximal $s-t$-path as solution. Under this constraint, we can see that the solution
+    must at first be a \textbf{safe} path, so the program is actually the shortest path problem.
+\subsection*{Exer.5}
+    The optimal solution is the shortest $s-t$-path $sp$, and for each vertex along the path, we must 
+    set $g_v$ for $(u,v), u \in sp, v \notin sp$ accordingly to $g_v-g_u$ constraints.
+\end{document}
+
